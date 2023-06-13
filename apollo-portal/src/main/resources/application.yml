@@ -44,9 +44,19 @@ server:
         # prevent csrf
         same-site: Lax
 
+opscloud:
+  url: 'for params'
+  token: 'for params'
+
+# java -jar -Djasypt.encryptor.password=${password}
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: 'org.jasypt.iv.NoIvGenerator'
+
 logging:
   file:
-    name: /opt/logs/100003173/apollo-portal.log
+    name: ${HOME}/logs/apollo/100003173/apollo-portal.log
 
 management:
   health:
