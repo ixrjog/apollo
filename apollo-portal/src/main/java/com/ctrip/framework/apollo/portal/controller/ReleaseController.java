@@ -16,6 +16,7 @@
  */
 package com.ctrip.framework.apollo.portal.controller;
 
+import com.ctrip.framework.apollo.portal.opscloud.aop.ProcessControlInterceptor;
 import com.ctrip.framework.apollo.common.dto.ReleaseDTO;
 import com.ctrip.framework.apollo.common.exception.BadRequestException;
 import com.ctrip.framework.apollo.common.exception.NotFoundException;
@@ -69,8 +70,26 @@ public class ReleaseController {
     this.userInfoHolder = userInfoHolder;
   }
 
+  /**
+   * 发布接口 TODO 增加切面，做发布管控
+   * @param appId
+   * @param env
+   * @param clusterName
+   * @param namespaceName
+   * @param model
+   * @return
+   */
   @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
   @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/releases")
+  @ProcessControlInterceptor(appIdSpEL = "#appId",
+          envSpEL = "#env",
+          clusterNameSpEL = "#clusterName",
+          namespaceNameSpEL = "#namespaceName",
+          releaseTitleSpEL = "#model.releaseTitle",
+          releaseCommentSpEL = "#model.releaseComment",
+          releasedBySpEL = "#model.releasedBy",
+          isEmergencyPublishSpEL = "#model.isEmergencyPublish"
+  )
   public ReleaseDTO createRelease(@PathVariable String appId,
                                   @PathVariable String env, @PathVariable String clusterName,
                                   @PathVariable String namespaceName, @RequestBody NamespaceReleaseModel model) {
@@ -98,8 +117,27 @@ public class ReleaseController {
     return createdRelease;
   }
 
+  /**
+   * 灰度发布
+   * @param appId
+   * @param env
+   * @param clusterName
+   * @param namespaceName
+   * @param branchName
+   * @param model
+   * @return
+   */
   @PreAuthorize(value = "@permissionValidator.hasReleaseNamespacePermission(#appId, #namespaceName, #env)")
   @PostMapping(value = "/apps/{appId}/envs/{env}/clusters/{clusterName}/namespaces/{namespaceName}/branches/{branchName}/releases")
+  @ProcessControlInterceptor(appIdSpEL = "#appId", envSpEL = "#env",
+          clusterNameSpEL = "#clusterName",
+          namespaceNameSpEL = "#namespaceName",
+          branchNameSpEL = "#branchName",
+          releaseTitleSpEL = "#model.releaseTitle",
+          releaseCommentSpEL = "#model.releaseComment",
+          releasedBySpEL = "#model.releasedBy",
+          isEmergencyPublishSpEL = "#model.isEmergencyPublish"
+  )
   public ReleaseDTO createGrayRelease(@PathVariable String appId,
                                       @PathVariable String env, @PathVariable String clusterName,
                                       @PathVariable String namespaceName, @PathVariable String branchName,

@@ -1,4 +1,4 @@
-package com.ctrip.framework.apollo.opscloud.result;
+package com.ctrip.framework.apollo.portal.opscloud.result;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

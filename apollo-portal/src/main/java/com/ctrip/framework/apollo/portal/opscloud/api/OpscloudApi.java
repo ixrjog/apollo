@@ -1,8 +1,8 @@
-package com.ctrip.framework.apollo.opscloud.api;
+package com.ctrip.framework.apollo.portal.opscloud.api;
 
-import com.ctrip.framework.apollo.opscloud.feign.OpscloudV1Feign;
-import com.ctrip.framework.apollo.opscloud.param.OpscloudParam;
-import com.ctrip.framework.apollo.opscloud.result.OpscloudResult;
+import com.ctrip.framework.apollo.portal.opscloud.feign.OpscloudV1Feign;
+import com.ctrip.framework.apollo.portal.opscloud.param.OpscloudParam;
+import com.ctrip.framework.apollo.portal.opscloud.result.OpscloudResult;
 import feign.Feign;
 import feign.Retryer;
 import feign.jackson.JacksonDecoder;
@@ -17,14 +17,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class OpscloudApi {
 
-    private final static String OC_URL = "https://oc.chuanyinet.com";
-
-    public OpscloudResult.InterceptionEventResponse preInterceptionEvent(OpscloudParam.ReleaseEvent interceptionEvent) {
+    public OpscloudResult.InterceptionEventResponse preInterceptionEvent(String url, OpscloudParam.ReleaseEvent interceptionEvent) {
         OpscloudV1Feign opscloudApi = Feign.builder()
                 .retryer(new Retryer.Default(3000, 3000, 3))
                 .encoder(new JacksonEncoder())
                 .decoder(new JacksonDecoder())
-                .target(OpscloudV1Feign.class, OC_URL);
+                .target(OpscloudV1Feign.class, url);
         return opscloudApi.preInterceptionEvent(interceptionEvent);
     }
 

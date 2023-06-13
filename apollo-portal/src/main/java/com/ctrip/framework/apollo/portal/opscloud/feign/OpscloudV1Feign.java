@@ -1,7 +1,7 @@
-package com.ctrip.framework.apollo.opscloud.feign;
+package com.ctrip.framework.apollo.portal.opscloud.feign;
 
-import com.ctrip.framework.apollo.opscloud.param.OpscloudParam;
-import com.ctrip.framework.apollo.opscloud.result.OpscloudResult;
+import com.ctrip.framework.apollo.portal.opscloud.param.OpscloudParam;
+import com.ctrip.framework.apollo.portal.opscloud.result.OpscloudResult;
 import feign.Headers;
 import feign.RequestLine;
 

@@ -1,4 +1,4 @@
-package com.ctrip.framework.apollo.opscloud.aop;
+package com.ctrip.framework.apollo.portal.opscloud.aop;
 
 import java.lang.annotation.*;
 

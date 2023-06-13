@@ -26,12 +26,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableAspectJAutoProxy
 @Configuration
 @EnableAutoConfiguration(exclude = {LdapAutoConfiguration.class})
 @EnableTransactionManagement
 @ComponentScan(basePackageClasses = {ApolloCommonConfig.class,
     PortalApplication.class, PortalOpenApiConfig.class})
+@EnableAspectJAutoProxy(exposeProxy = true)
 public class PortalApplication {
 
   public static void main(String[] args) throws Exception {

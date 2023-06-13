@@ -1,9 +1,6 @@
-package com.ctrip.framework.apollo.opscloud.param;
+package com.ctrip.framework.apollo.portal.opscloud.param;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * @Author baiyi
@@ -16,6 +13,7 @@ public class OpscloudParam {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @ToString
     public static class ReleaseEvent {
 
         private String appId;
