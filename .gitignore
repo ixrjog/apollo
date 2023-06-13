@@ -29,4 +29,5 @@ target
 
 # opscloud
 application-ldap.yml
+pp-build.sh
 
