@@ -12,7 +12,7 @@ import feign.RequestLine;
  */
 public interface OpscloudV1Feign {
 
-    @RequestLine("POST /apollo/interception/event")
+    @RequestLine("POST /api/out/apollo/release/intercept")
     @Headers({"Content-Type: application/json;charset=utf-8"})
     OpscloudResult.InterceptionEventResponse preInterceptionEvent(OpscloudParam.ReleaseEvent interceptionEvent);
 

@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.helpers.MessageFormatter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.Order;
@@ -128,10 +129,10 @@ public class ProcessControlInterceptorAspect {
         try {
             response = opscloudApi.preInterceptionEvent(url, interceptionEventParam);
             if (!response.isSuccess()) {
-                throw new AccessDeniedException("Access is denied: " + response.getMsg());
+                throw new AccessDeniedException(MessageFormatter.format("Access is denied: {}",response.getMsg()).getMessage());
             }
         } catch (Exception e) {
-            throw new BadRequestException("OC接口错误: " + e.getMessage());
+            throw new BadRequestException(MessageFormatter.format("OC接口错误: {}",e.getMessage()).getMessage());
         }
     }
 
