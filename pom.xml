@@ -224,6 +224,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+			<!-- for opscloud -->
+<!--			<dependency>-->
+<!--				<groupId>org.springframework.boot</groupId>-->
+<!--				<artifactId>spring-boot-starter-aop</artifactId>-->
+<!--			</dependency>-->
+
 			<!-- required by eureka -->
 			<dependency>
 				<groupId>com.sun.jersey.contribs</groupId>
