@@ -63,7 +63,7 @@ namespace_module.config(function (valdrProvider) {
         'AppNamespace': {
             'namespaceName': {
                 'size': {
-                    'max': 32,
+                    'max': 64,
                     'message': 'Valdr.AppNamespace.NamespaceName.Size'
                 },
                 'required': {
