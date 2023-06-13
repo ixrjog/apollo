@@ -20,11 +20,8 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -87,15 +84,7 @@ public class ProcessControlInterceptorAspect {
             String env = Objects.requireNonNull(envExpression.getValue(context)).toString();
             String clusterName = Objects.requireNonNull(clusterNameExpression.getValue(context)).toString();
             String namespaceName = Objects.requireNonNull(namespaceNameExpression.getValue(context)).toString();
-            String username;
-            try {
-                Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-                username = auth.getName();
-            }catch (Exception e){
-                throw new BadRequestException("获取用户名错误！");
-            }
-            // auth.getName(); // 登录用户名
-            //LdapUserDetailsImpl user = (LdapUserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String username = getUsername();
             OpscloudParam.ReleaseEvent interceptionEventParam = OpscloudParam.ReleaseEvent.builder()
                     .username(username)
                     .appId(appId)
@@ -114,6 +103,26 @@ public class ProcessControlInterceptorAspect {
         return joinPoint.proceed();
     }
 
+    /**
+     * 从上下文中获取登录用户名
+     * @return
+     */
+    private String getUsername(){
+        // auth.getName(); // 登录用户名
+        //LdapUserDetailsImpl user = (LdapUserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            return auth.getName();
+        } catch (Exception e){
+            throw new BadRequestException("获取用户名错误！");
+        }
+    }
+
+    /**
+     * 调用OC
+     *
+     * @param interceptionEventParam
+     */
     private void handleApiInterceptionVerification(OpscloudParam.ReleaseEvent interceptionEventParam) {
         OpscloudResult.InterceptionEventResponse response;
         try {
@@ -124,7 +133,6 @@ public class ProcessControlInterceptorAspect {
         } catch (Exception e) {
             throw new BadRequestException("OC接口错误: " + e.getMessage());
         }
-
     }
 
 }
