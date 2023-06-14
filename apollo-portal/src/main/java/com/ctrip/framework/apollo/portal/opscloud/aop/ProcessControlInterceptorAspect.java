@@ -86,36 +86,28 @@ public class ProcessControlInterceptorAspect {
             String clusterName = Objects.requireNonNull(clusterNameExpression.getValue(context)).toString();
             String namespaceName = Objects.requireNonNull(namespaceNameExpression.getValue(context)).toString();
             String username = getUsername();
-            OpscloudParam.ReleaseEvent interceptionEventParam = OpscloudParam.ReleaseEvent.builder()
-                    .username(username)
-                    .appId(appId)
-                    .env(env)
-                    .clusterName(clusterName)
-                    .namespaceName(namespaceName)
-                    .branchName(branchName)
-                    .isGray(StringUtils.isNotBlank(branchName))
-                    .token(token)
-                    .build();
+            OpscloudParam.ReleaseEvent interceptionEventParam = OpscloudParam.ReleaseEvent.builder().username(username).appId(appId).env(env).clusterName(clusterName).namespaceName(namespaceName).branchName(branchName).isGray(StringUtils.isNotBlank(branchName)).token(token).build();
             log.debug(interceptionEventParam.toString());
             handleApiInterceptionVerification(interceptionEventParam);
         } catch (NullPointerException e) {
-            throw new BadRequestException("参数不正确, 这个错误不应该发生！");
+            throw new BadRequestException("Parameter is incorrect！");
         }
         return joinPoint.proceed();
     }
 
     /**
      * 从上下文中获取登录用户名
+     *
      * @return
      */
-    private String getUsername(){
+    private String getUsername() {
         // auth.getName(); // 登录用户名
         //LdapUserDetailsImpl user = (LdapUserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             return auth.getName();
-        } catch (Exception e){
-            throw new BadRequestException("获取用户名错误！");
+        } catch (Exception e) {
+            throw new BadRequestException("Error in obtaining username！");
         }
     }
 
@@ -126,13 +118,9 @@ public class ProcessControlInterceptorAspect {
      */
     private void handleApiInterceptionVerification(OpscloudParam.ReleaseEvent interceptionEventParam) {
         OpscloudResult.InterceptionEventResponse response;
-        try {
-            response = opscloudApi.preInterceptionEvent(url, interceptionEventParam);
-            if (!response.isSuccess()) {
-                throw new AccessDeniedException(MessageFormatter.format("Access is denied: {}",response.getMsg()).getMessage());
-            }
-        } catch (Exception e) {
-            throw new BadRequestException(MessageFormatter.format("OC接口错误: {}",e.getMessage()).getMessage());
+        response = opscloudApi.preInterceptionEvent(url, interceptionEventParam);
+        if (!response.isSuccess()) {
+            throw new AccessDeniedException(MessageFormatter.format("Access is denied: {}", response.getMsg()).getMessage());
         }
     }
 
